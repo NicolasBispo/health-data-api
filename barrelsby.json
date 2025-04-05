@@ -1,0 +1,11 @@
+{
+  "directory": [
+    "src/app/controllers",
+    "src/app/services",
+    "src/app/models"
+  ],
+  "structure": "flat",
+  "exclude": [
+    "__tests__"
+  ]
+}

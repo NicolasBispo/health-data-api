@@ -1,0 +1,40 @@
+{
+   "name": "health-data-api",
+   "version": "0.0.1",
+   "description": "Awesome project developed with TypeORM.",
+   "type": "commonjs",
+   "devDependencies": {
+      "@types/express": "^5.0.1",
+      "@types/node": "^22.13.10",
+      "barrelsby": "^2.8.1",
+      "ts-node": "^10.9.2",
+      "tsconfig-paths": "^4.2.0",
+      "typescript": "^5.8.2"
+   },
+   "dependencies": {
+      "cors": "^2.8.5",
+      "express": "^5.1.0",
+      "multer": "^1.4.5-lts.2",
+      "pg": "^8.14.1",
+      "reflect-metadata": "^0.2.2",
+      "typeorm": "0.3.22",
+      "zod": "^3.24.2"
+   },
+   "scripts": {
+      "start": "ts-node src/index.ts",
+      "typeorm": "typeorm-ts-node-commonjs",
+      "generate_exports": "npx barrelsby --config barrelsby.json --delete"
+   },
+   "barrelsby": {
+      "directory": [
+         "src/app/controllers",
+         "src/app/services",
+         "src/app/models"
+      ],
+      "structure": "flat",
+      "exclude": [
+         "__tests__",
+         "node_modules"
+      ]
+   }
+}
