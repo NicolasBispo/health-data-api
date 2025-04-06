@@ -2,10 +2,6 @@ import { CreateDoctorDto } from "../dto/doctors/create_doctor_dto";
 import { DoctorService } from "../services/doctors_service";
 import { BaseController } from "./base_controller";
 import { getPagination } from "../helpers/pagination";
-import {
-  DoctorDto,
-  ListPaginatedDoctorsDto,
-} from "../dto/doctors/view_doctors_dto";
 import { UpdateDoctorDto } from "../dto/doctors/update_doctor_dto";
 
 export class DoctorController extends BaseController {
@@ -15,24 +11,13 @@ export class DoctorController extends BaseController {
     const { page, perPage, skip } = getPagination(this.req);
     const doctors = await this.doctorService.listAllDoctors({ perPage, skip });
     const totalCount = await this.doctorService.count();
-    this.ok(
-      new ListPaginatedDoctorsDto({
-        page,
-        perPage,
-        totalCount,
-        results: doctors.map((doctor) => ({
-          ...doctor,
-          createdAt: doctor.createdAt,
-          updatedAt: doctor.updatedAt,
-          hospitals: doctor.hospitals.map((hospital) => ({
-            id: hospital.id,
-            name: hospital.name,
-            createdAt: hospital.createdAt,
-            updatedAt: hospital.updatedAt,
-          })),
-        })),
-      })
-    );
+    this.ok({
+      page,
+      perPage,
+      skip,
+      results: doctors,
+      totalCount,
+    });
   }
 
   async findOneDoctor() {
@@ -41,13 +26,13 @@ export class DoctorController extends BaseController {
     if (!doctor) {
       return this.notFound("Doctor not found");
     }
-    return this.ok(new DoctorDto(doctor));
+    return this.ok(doctor);
   }
 
   async createDoctor() {
     const createDoctorDto = this.req.body as CreateDoctorDto;
     const doctor = await this.doctorService.createDoctor(createDoctorDto);
-    return this.ok(new DoctorDto(doctor));
+    return this.ok(doctor);
   }
 
   async updateDoctor() {
@@ -57,7 +42,7 @@ export class DoctorController extends BaseController {
     if (!doctor) {
       return this.notFound("Doctor not found");
     }
-    return this.ok(new DoctorDto(doctor));
+    return this.ok(doctor);
   }
 
   async destroyDoctor() {
@@ -66,6 +51,6 @@ export class DoctorController extends BaseController {
     if (!doctor) {
       return this.notFound("Doctor not found");
     }
-    return this.ok(new DoctorDto(doctor));
+    return this.ok(doctor);
   }
 }
