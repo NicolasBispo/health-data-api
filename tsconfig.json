@@ -1,21 +1,29 @@
 {
    "compilerOptions": {
-      "lib": [
-         "es2021"
-      ],
-      "target": "es2021",
-      "module": "commonjs",
-      "moduleResolution": "node",
-      "outDir": "./build",
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
-      "esModuleInterop": true,
-      "sourceMap": true,
-      "baseUrl": "./",
-      "paths": {
-         "@/*": [
-            "src/*"
-         ],
-      }
-   }
-}
+     "target": "ES2024",
+     "module": "CommonJS",
+     "lib": ["ESNext", "ES2021", "ES2024"],
+     "moduleResolution": "node",
+     "outDir": "./build",
+     "rootDir": "./src",
+     "sourceMap": true,
+ 
+     "strict": true,
+     "esModuleInterop": true,
+     "skipLibCheck": true,
+     
+     "experimentalDecorators": true,
+     "emitDecoratorMetadata": true,
+ 
+     "baseUrl": "./",
+     "paths": {
+       "@/*": ["src/*"],
+       "@modules/*": ["src/modules/*"]
+     },
+ 
+     "types": ["node"] // 👈 garante os tipos globais de node, útil pro Fastify também
+   },
+   "include": ["src"], // 👈 isso é importante pra considerar os arquivos de código
+   "exclude": ["node_modules", "build"]
+ }
+ 

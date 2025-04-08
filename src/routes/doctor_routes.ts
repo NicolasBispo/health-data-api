@@ -1,13 +1,10 @@
+import { FastifyInstance } from "fastify";
 import { DoctorController } from "@/app/controllers";
 
-import { Router } from "express";
-
-const router = Router();
-
-router.get("/", DoctorController.handle("findAllDoctors"));
-router.post("/", DoctorController.handle("createDoctor"));
-router.get("/:id", DoctorController.handle("findOneDoctor"));
-router.get("/:id", DoctorController.handle("updateDoctor"));
-router.get("/:id", DoctorController.handle("destroyDoctor"));
-
-export const doctorRoutes = router;
+export const doctorRoutes = async (fastify: FastifyInstance) => {
+  fastify.get("/", DoctorController);
+  fastify.post("/", DoctorController.handle("createDoctor"));
+  fastify.get("/:id", DoctorController.handle("findOneDoctor"));
+  fastify.put("/:id", DoctorController.handle("updateDoctor")); // corrigido de GET para PUT
+  fastify.delete("/:id", DoctorController.handle("destroyDoctor")); // corrigido de GET para DELETE
+};
