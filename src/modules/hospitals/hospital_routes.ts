@@ -1,8 +1,8 @@
 import { FastifyInstance } from "fastify";
-import { DoctorController } from "@/modules/doctors/doctor_controller";
+import { HospitalsController } from "@/modules/hospitals/hospital_controller";
 
-export const doctorRoutes = async (fastify: FastifyInstance) => {
-  const controller = new DoctorController();
+export const hospitalRoutes = async (fastify: FastifyInstance) => {
+  const controller = new HospitalsController();
 
   fastify.get("/", controller.index);
   fastify.post("/", controller.create);

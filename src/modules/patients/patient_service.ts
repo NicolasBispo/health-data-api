@@ -1,33 +1,18 @@
 import { AppDataSource } from "@/config/database";
 import { Patient } from "./patient_entity";
 import { CreatePatientDto, UpdatePatientDto } from "./dtos";
-import {ContactInfoService} from "@modules/contact_infos/contact_info_service";
-import { ContactableType, ContactInfo } from "@modules/contact_infos/contact_infos_entity";
-
-export interface SerializedPatient {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  contactData: {
-    id: string;
-    value: string;
-    type: string;
-    contactableId: string;
-  }[];
-}
+import { ContactInfoService } from "@modules/contact_infos/contact_info_service";
+import { ContactableType } from "@modules/contact_infos/contact_infos_entity";
 
 export class PatientService {
   private readonly patientRepository = AppDataSource.getRepository(Patient);
   private readonly contactInfoService = new ContactInfoService();
 
-  async createPatient(
-    createPatientDto: CreatePatientDto
-  ): Promise<SerializedPatient> {
+  async createPatient(createPatientDto: CreatePatientDto) {
     const patient = this.patientRepository.create({
       ...createPatientDto,
     });
-    const contactData = await this.contactInfoService.createContactsForEntity(
+    await this.contactInfoService.createContactsForEntity(
       ContactableType.PATIENT,
       patient.id,
       (createPatientDto?.contacts ?? []).map((contact) => ({
@@ -38,7 +23,7 @@ export class PatientService {
       }))
     );
     const savedPatient = await this.patientRepository.save(patient);
-    return this.serializePatient(savedPatient, contactData);
+    return savedPatient;
   }
 
   async listAllPatients(args: {
@@ -89,27 +74,5 @@ export class PatientService {
   async count() {
     const count = await this.patientRepository.count();
     return count;
-  }
-
-  serializePatient(patient: Patient, contactInfoData?: ContactInfo[]) {
-    const { id, firstName, lastName, email } = patient;
-    return {
-      id,
-      firstName,
-      lastName,
-      email,
-      hospitals: patient.hospitals.map((hospital) => ({
-        id: hospital.id,
-        name: hospital.name,
-      })),
-      contactData: contactInfoData
-        ? contactInfoData.map((contactInfo) => ({
-            id: contactInfo.id,
-            value: contactInfo.value,
-            type: contactInfo.type,
-            contactableId: contactInfo.contactableId,
-          }))
-        : [],
-    };
   }
 }

@@ -1,24 +1,23 @@
-import { CreateHospitalDto } from "../dto/hospitals/create_hospital_dto";
-import { HospitalService } from "../services/hospitals_service ";
+import { PatientService } from "./patient_service";
 import { getPagination } from "@/helpers/pagination";
-import { UpdateHospitalDto } from "../dto/hospitals/update_hospital_dto";
+import { UpdatePatientDto, CreatePatientDto } from "./dtos";
 import { FastifyRequest, FastifyReply } from "fastify";
 
-export class HospitalsController {
-  private readonly hospitalService = new HospitalService();
+export class PatientsController {
+  private readonly patientService = new PatientService();
 
   async index(req: FastifyRequest, res: FastifyReply) {
     const { page, perPage, skip } = getPagination(req);
-    const hospitals = await this.hospitalService.listAllHospitals({
+    const patients = await this.patientService.listAllPatients({
       perPage,
       skip,
     });
-    const totalCount = await this.hospitalService.count();
+    const totalCount = await this.patientService.count();
     return res.send({
       page,
       perPage,
       totalCount,
-      results: hospitals,
+      results: patients,
     });
   }
 
@@ -27,38 +26,36 @@ export class HospitalsController {
     res: FastifyReply
   ) {
     const { id } = req.params;
-    const hospital = await this.hospitalService.findOneHospital(id);
-    if (!hospital) {
+    const patient = await this.patientService.findOnePatient(id);
+    if (!patient) {
       return res.status(404).send({ message: "Hospital not found" });
     }
-    return res.send(hospital);
+    return res.send(patient);
   }
 
   async create(
-    req: FastifyRequest<{ Body: CreateHospitalDto }>,
+    req: FastifyRequest<{ Body: CreatePatientDto }>,
     res: FastifyReply
   ) {
     const createHospitalDto = req.body;
-    const hospital = await this.hospitalService.createHospital(
-      createHospitalDto
-    );
-    return res.send(hospital);
+    const patient = await this.patientService.createPatient(createHospitalDto);
+    return res.send(patient);
   }
 
   async update(
-    req: FastifyRequest<{ Body: UpdateHospitalDto; Params: { id: string } }>,
+    req: FastifyRequest<{ Body: UpdatePatientDto; Params: { id: string } }>,
     res: FastifyReply
   ) {
     const { id } = req.params;
     const updateHospitalDto = req.body;
-    const hospital = await this.hospitalService.updateHospital(
+    const patient = await this.patientService.updatePatient(
       id,
       updateHospitalDto
     );
-    if (!hospital) {
+    if (!patient) {
       return res.status(404).send({ message: "Hospital not found" });
     }
-    return res.send(hospital);
+    return res.send(patient);
   }
 
   async destroy(
@@ -66,10 +63,10 @@ export class HospitalsController {
     res: FastifyReply
   ) {
     const { id } = req.params;
-    const hospital = await this.hospitalService.destroyHospital(id);
-    if (!hospital) {
+    const patient = await this.patientService.destroyPatient(id);
+    if (!patient) {
       return res.status(404).send({ message: "Hospital not found" });
     }
-    return res.send(hospital);
+    return res.send(patient);
   }
 }
