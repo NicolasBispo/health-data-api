@@ -5,12 +5,12 @@ import { AppBaseEntity } from "@/shared/entities/app_base_entity";
 @Entity()
 export class User extends AppBaseEntity {
   @Column({
-    nullable: false
+    nullable: false,
   })
   firstName!: string;
 
   @Column({
-    nullable: false
+    nullable: false,
   })
   lastName!: string;
 
