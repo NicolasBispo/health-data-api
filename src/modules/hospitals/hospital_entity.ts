@@ -5,13 +5,15 @@ import { Patient } from "@modules/patients/patient_entity";
 
 @Entity()
 export class Hospital extends AppBaseEntity {
-  @Column()
-  name: string;
+  @Column({
+    nullable: false
+  })
+  name!: string;
 
   @ManyToMany(() => Doctor, (doctor) => doctor.hospitals)
-  doctors: Doctor[];
+  doctors: Doctor[] = [];
 
   @ManyToMany(() => Patient, (patient) => patient.hospitals)
   @JoinTable()
-  patients: Patient[];
+  patients: Patient[] = [];
 }

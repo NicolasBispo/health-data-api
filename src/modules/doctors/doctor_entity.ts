@@ -7,22 +7,22 @@ import {
   OneToOne,
 } from "typeorm";
 import { AppBaseEntity } from "@/shared/entities/app_base_entity";
-import { Hospital } from "@modules/hospitals/hospital.entity";
-import { User } from "@modules/users/user.entity";
+import { Hospital } from "@modules/hospitals/hospital_entity";
+import { User } from "@modules/users/user_entity";
 
 @Entity()
 export class Doctor extends AppBaseEntity {
   @Column()
-  crm: string;
+  crm!: string;
 
   @Column()
-  specialty: string;
+  specialty!: string;
 
-  @ManyToMany(() => Hospital, (hospital) => hospital.doctors)
+  @ManyToMany(() => Hospital, (hospital : Hospital) => hospital.doctors)
   @JoinTable()
-  hospitals: Hospital[];
+  hospitals: Hospital[] = [];
 
   @OneToOne(() => User, (user) => user.doctor)
   @JoinColumn()
-  user: User;
+  user!: User;
 }
